@@ -22,7 +22,29 @@ namespace JourneyOfChampions
             Console.WriteLine("Your journey to be a champion starts now!");
             Console.WriteLine("Get ready...");
             Console.WriteLine("Your first decision is to choose which character you wanna use");
-            Console.WriteLine("You have the following options: Jorge, Donald, Wanaporn, Asa, Vladimir, Haakon");
+
+            string[] availableCharacters =
+            {
+                "Diego",
+                "Donald",
+                "Wanaporn",
+                "Asa",
+                "Vladimir",
+                "Haakon"
+            };
+
+            Console.WriteLine("You have the following options:");
+            foreach (string name in availableCharacters)
+            {
+                Console.WriteLine($"- {name}");
+            }
+
+            //.....
+
+            Console.Write("Choose a character: ");
+            string chosenName = Console.ReadLine();
+
+            Character a = new Champion(chosenName);
 
             Character champion = new Champion("Diego");
 
@@ -33,8 +55,11 @@ namespace JourneyOfChampions
             {
                 Console.WriteLine($"- {name}");
             }
-    
-            
+
+           
+
+
+
 
             stats.DisplayStatsDiego();
             Console.ReadLine();
@@ -42,6 +67,9 @@ namespace JourneyOfChampions
             champion.LosingHealth(20);
 
             Console.WriteLine($"Diego's health after taking damage: {champion.Health}");
+
+            champion.Moves.MakingMove("High Kick");
+            Console.WriteLine(champion.Moves.HighKicksUsed);
 
 
 
