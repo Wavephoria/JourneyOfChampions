@@ -9,18 +9,21 @@ namespace JourneyOfChampions
 {
     internal class Champion : Character
     {
-        private int highKicksUsed { set { } get { return highKicksUsed; } }
+        
+
+        private int highKicksUsed;
         private int lowKicksUsed;
         private int highPunchesUsed;
         private int lowPunchesUsed;
         private int blocksUsed;
 
-        Random rnd = new Random();
+        // Random rnd = new Random();
 
         public Champion(string name) : base(name)
         {
+            highKicksUsed = 0;
 
-            List<string> opponents = new List<string>
+            Opponents = new List<string>
             {
                 "Diego",
                 "Donald",
@@ -29,11 +32,11 @@ namespace JourneyOfChampions
                 "Vladimir",
                 "Haakon"
             };
-            opponents.Remove(name);
+            Opponents.Remove(name);
 
         }
 
-        public void NextOpponent()
+        public override void NextOpponent()
         {
             // rnd.Next(opponents.Count);  
         }

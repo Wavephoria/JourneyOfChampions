@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace JourneyOfChampions
 {
-    internal class Character
+    abstract class Character : IMove
     {
-        private string origin = "Sweden";
-        private int health;
-        private int stamina;
-        private int highKickPower;  // high damage, high stamina cost
-        private int lowKickPower;   // medium damage, medium stamina cost
-        private int highPunchPower; // medium damage, medium stamina cost
-        private int lowPunchPower;  // low damage, low stamina cost
-        private int blockPower;     // reduces damage taken, low stamina gain
-        private int dodgeChance;    // chance to completely avoid an attack, medium stamina gain
-        private int recoveryRate;  // recovers stamina while doing nothing, high stamina gain, takes full damage
+        public List<string> Opponents { get; protected set; }
 
+        protected string origin = "Sweden";
+        public int Health { get; protected set; }
+        protected int stamina;
+        protected int highKickPower;  // high damage, high stamina cost
+        protected int lowKickPower;   // medium damage, medium stamina cost
+        protected int highPunchPower; // medium damage, medium stamina cost
+        protected int lowPunchPower;  // low damage, low stamina cost
+        protected int blockPower;     // reduces damage taken, low stamina gain
+        protected int dodgeChance;    // chance to completely avoid an attack, medium stamina gain
+        protected int recoveryRate;  // recovers stamina while doing nothing, high stamina gain, takes full damage
 
         // Character movements will affect stamina and health differently based on their power levels
         // Moves: High Kick, Low Kick, High Punch, Low Punch, Block, Dodge, Recover
@@ -29,7 +30,7 @@ namespace JourneyOfChampions
         {
             switch (name)
             {
-                case "Jorge":
+                case "Diego":
                     SetDiegoStats();
                     break;
                 default:
@@ -54,7 +55,7 @@ namespace JourneyOfChampions
         {
             name = Characters.Diego;
             origin = "Brazil";
-            health = 150;
+            Health = 150;
             stamina = 100;
             highKickPower = 25;
             lowKickPower = 15;
@@ -63,5 +64,14 @@ namespace JourneyOfChampions
             blockPower = 30;
         }
 
+        public virtual void NextOpponent() { }
+        public void LosingHealth(int damage) 
+        {
+            Health -= damage;
+            if (Health < 0)
+            {
+                Health = 0;
+            }
+        }
     }
 }
