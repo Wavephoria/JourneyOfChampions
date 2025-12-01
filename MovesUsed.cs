@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JourneyOfChampions
 {
-    internal class MovesUsed
+     class MovesUsed
     {
         public int HighKicksUsed { get; private set; }
         public int LowKicksUsed { get; private set; }
@@ -14,6 +14,8 @@ namespace JourneyOfChampions
         public int LowPunchesUsed { get; private set; }
         public int BlocksUsed { get; private set; }
         public int DodgesUsed { get; private set; }
+
+        public int SpecialMovesUsed { get; private set; }
 
         public void MakingMove(string move)
         {
@@ -39,6 +41,10 @@ namespace JourneyOfChampions
                     break;
                 default:
                     Console.WriteLine("Invalid move.");
+                    break;
+
+                case "Special Move":
+                    SpecialMovesUsed++;
                     break;
             }
         }

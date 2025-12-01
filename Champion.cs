@@ -11,7 +11,12 @@ namespace JourneyOfChampions
     {
         // Random rnd = new Random();
 
-        public Champion(string name) : base(name)
+
+        public Champion(string name) : this(name, new BasicDamageCalculator())
+        {
+        }
+
+        public Champion(string name, IDamageCalculator calculator) : base(name, calculator)
         {
             Moves = new MovesUsed();
             Opponents = new List<string>
