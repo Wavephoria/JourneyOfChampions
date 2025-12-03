@@ -10,9 +10,8 @@ namespace JourneyOfChampions
 {
     abstract class Character
     {
-        public List<string> Opponents { get; protected set; } //HMMMMMM
-        public MovesUsed Moves { get; protected set; }  //HMMMMM
-
+        public List<string> Opponents { get; protected set; }
+        public MovesUsed Moves { get; protected set; }
         public string Name { get; protected set; }
         public int Health { get; set; }
         public bool IsAlive => Health > 0;      
