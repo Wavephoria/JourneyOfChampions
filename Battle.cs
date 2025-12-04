@@ -51,6 +51,7 @@ namespace JourneyOfChampions
         }
         public void StaminaChange(Character player, Character enemy) 
         { 
+
             Dictionary<string, int> staminaChanges = new Dictionary<string, int>
             {
                 { "High Kick", -20 },
@@ -65,6 +66,7 @@ namespace JourneyOfChampions
 
             player.Stamina += staminaChanges.GetValueOrDefault(PlayerMove, 0);
             enemy.Stamina += staminaChanges.GetValueOrDefault(EnemyMove, 0);
+
         }
         public void AttackAgainstBlock() { }
         public void AttackAgainstDodge() { }
@@ -76,22 +78,35 @@ namespace JourneyOfChampions
 
             while (player.IsAlive && enemy.IsAlive)
             {
-                Console.WriteLine($"\n{player.Name}: {player.Health} HP and Stamina: {player.Stamina}");
-                Console.WriteLine($"Vs.");
-                Console.WriteLine($"{enemy.Name}: {enemy.Health} HP and Stamina: {enemy.Stamina}");
-                Console.WriteLine();
-                Console.WriteLine("Choose your move:");
-                Console.WriteLine("1) High Kick");
-                Console.WriteLine("2) Low Kick");
-                Console.WriteLine("3) High Punch");
-                Console.WriteLine("4) Low Punch");
-                Console.WriteLine("5) Block");
-                Console.WriteLine("6) Dodge");
-                Console.WriteLine("7) Recover");
-                Console.WriteLine("8) Special Move");
-                Console.Write("Your choice (Write number): ");
+                string choice;
 
-                string choice = Console.ReadLine()!;
+                if (player.Stamina <= 0)
+                {
+                    Console.WriteLine("You ran out of stamina");
+                    Console.WriteLine("You can only do recovery");
+                    choice = "Recover";
+                }
+
+                else
+                {
+                    Console.WriteLine($"\n{player.Name}: {player.Health} HP and Stamina: {player.Stamina}");
+                    Console.WriteLine($"Vs.");
+                    Console.WriteLine($"{enemy.Name}: {enemy.Health} HP and Stamina: {enemy.Stamina}");
+                    Console.WriteLine();
+                    Console.WriteLine("Choose your move:");
+                    Console.WriteLine("1) High Kick");
+                    Console.WriteLine("2) Low Kick");
+                    Console.WriteLine("3) High Punch");
+                    Console.WriteLine("4) Low Punch");
+                    Console.WriteLine("5) Block");
+                    Console.WriteLine("6) Dodge");
+                    Console.WriteLine("7) Recover");
+                    Console.WriteLine("8) Special Move");
+                    Console.Write("Your choice (Write number): ");
+                    choice = Console.ReadLine()!;
+                }
+
+                
                 
                 switch (choice)
                 {

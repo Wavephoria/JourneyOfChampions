@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace JourneyOfChampions
 {
@@ -18,13 +19,19 @@ namespace JourneyOfChampions
 
         // KRAV 2:
         // 1: Overloading av kunstruktorer
-        // 2: Tanken är att göra en overloading av kunstruktorn när man möter en boss men det har inte implementerats ännu.
-        // 3: Har ingen annan ordentlig plan för att få en bra implementation av detta krav.
+        // 2: Skapas en motståndare utifrån de från början bestämde motståndarna, när alla är slagna så görs en overloading på en boss.
+        // 3: Overloading som tar in en bool om det är dags att möta bossen.
+        // När listan är tom så skapas det en overloading av computer som skapar bossen till spelet.
 
         public Computer(string name) : base(name)
         {
 
-        }   
+        }
+
+        public Computer(string name, bool boss) : base(name) 
+        {
+            SetSnakeStats();
+        }
 
         public override string CalculateMove(Character champion, Character computer, bool firstBattle) 
         {
@@ -91,22 +98,46 @@ namespace JourneyOfChampions
         }
         private string BasicMoves()
         {
-            if (StyleOfPlay == "Aggressive")
+
+            List<string> aggressiveMoves = new List<string> { "High Kick", "Low Kick", "High Punch", "Low Punch" };
+            List<string> defensiveMoves = new List<string> { "Block", "Dodge", "Recover" };
+
+            int number = rnd.Next(1, 11);
+            int index;
+
+            if (StyleOfPlay == "Defensive")
             {
-                List<string> aggressiveMoves = new List<string> { "High Kick", "Low Kick", "High Punch", "Low Punch" };
-                int index = rnd.Next(aggressiveMoves.Count);
-                return aggressiveMoves[index];
+
+                if (number < 8)
+                {
+                    index = rnd.Next(aggressiveMoves.Count);
+                    return aggressiveMoves[index];
+                }
+                else
+                {
+                    index = rnd.Next(defensiveMoves.Count);
+                    return defensiveMoves[index];
+                }
+
             }
-            else if (StyleOfPlay == "Defensive")
+            else if (StyleOfPlay == "Offensive")
             {
-                List<string> defensiveMoves = new List<string> { "Block", "Dodge", "Recover" };
-                int index = rnd.Next(defensiveMoves.Count);
-                return defensiveMoves[index];
+
+                if (number > 7)
+                {
+                    index = rnd.Next(aggressiveMoves.Count);
+                    return aggressiveMoves[index];
+                }
+                else
+                {
+                    index = rnd.Next(defensiveMoves.Count);
+                    return defensiveMoves[index];
+                }
             }
             else // Balanced
             {
                 List<string> allMoves = new List<string> { "High Kick", "Low Kick", "High Punch", "Low Punch", "Block", "Dodge", "Recover" };
-                int index = rnd.Next(allMoves.Count);
+                index = rnd.Next(allMoves.Count);
                 return allMoves[index];
             }
         }
@@ -115,5 +146,7 @@ namespace JourneyOfChampions
             
 
         }
+
+
     }
 }

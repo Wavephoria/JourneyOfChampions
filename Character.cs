@@ -20,9 +20,11 @@ namespace JourneyOfChampions
         // 1: Inkapsling/Informationskapsling
         // 2: Användning av protected för properties och fields som ska ärvas.
         // 3: När man skapar sin karaktär i Champion-klassen så kan man använda sig av dessa properties.
+
         public List<string> Opponents { get; protected set; }
         public MovesUsed Moves { get; protected set; }
         public string Name { get; protected set; }
+
         // KRAV 3:
         // 1: Computed Properties
         // 2: Health har ett värde som ändras i klassen Battle när man tar skada.
@@ -70,6 +72,9 @@ namespace JourneyOfChampions
                 case "Haakon":
                     SetHaakonStats();
                     break;
+
+                case "Snake":
+                    break;
                 default:
                     throw new ArgumentException("Unknown character name", nameof(name));
 
@@ -83,7 +88,8 @@ namespace JourneyOfChampions
             Wanaporn,
             Asa,
             Vladimir,
-            Haakon
+            Haakon,
+            Snake
         }
         private void SetDiegoStats()
         {
@@ -133,7 +139,7 @@ namespace JourneyOfChampions
             origin = "Sweden";
             Health = 150;
             Stamina = 175;
-            highKickPower = 20;
+            highKickPower = 150;
             lowKickPower = 15;
             highPunchPower = 20;
             lowPunchPower = 15;
@@ -169,7 +175,26 @@ namespace JourneyOfChampions
             dodgeChance = 70;
             recoveryRate = 25;
         }
+
+        protected void SetSnakeStats()
+        {
+            name = Characters.Snake;
+            origin = "Unknown";
+            Health = 1000;
+            Stamina = 1000;
+            highKickPower = 100;
+            lowKickPower = 80;
+            highPunchPower = 40;
+            lowPunchPower = 80;
+            blockPower = 40;
+            dodgeChance = 99;
+            recoveryRate = 50;
+
+        }
+
+
         public virtual string NextOpponent() { return ""; }
+        public virtual string NextOpponent(bool boss) { return ""; }
         public virtual string CalculateMove(Character champion, Character computer, bool firstBattle) { return ""; }
 
 

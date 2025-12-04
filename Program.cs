@@ -10,7 +10,7 @@ namespace JourneyOfChampions
         static async Task Main(string[] args)
         {
             Battle battle = new Battle();
-
+            string enemyName;
 
             Console.Title = "Journey of Champions";
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -58,13 +58,27 @@ namespace JourneyOfChampions
             champion.Moves.AddingMoves();
 
             Console.WriteLine($"(You have chosen {chosenName} as your character!)");
-            string enemyName = champion.NextOpponent(); 
-            Console.WriteLine($"Your first opponent is {enemyName}");
 
-            Character enemyChampion = new Computer(enemyName);
+            while (champion.Opponents.Count > 0) 
+            {
+                enemyName = champion.NextOpponent();
+                Console.WriteLine($"Your first opponent is {enemyName}");
 
-            await musicPlayer.Play(@"sounds\TheJazzMan.mp3");
-            battle.StartFight(champion, enemyChampion);
+                Character enemyChampion = new Computer(enemyName);
+
+                await musicPlayer.Play(@"sounds\TheJazzMan.mp3");
+                battle.StartFight(champion, enemyChampion);
+
+            }
+
+            enemyName = champion.NextOpponent(true);
+
+            Character enemyBoss = new Computer(enemyName, true);
+
+            await musicPlayer.Play(@"sounds\QuietTension.mp3");
+            Console.WriteLine($"A new challenger awaits {enemyName}, last boss of this journey");
+
+            battle.StartFight(champion, enemyBoss);
 
             Console.ReadLine();
 
