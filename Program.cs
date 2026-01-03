@@ -11,7 +11,6 @@ namespace JourneyOfChampions
         {
             Move executer = new Move();
             Battle battle = new Battle(executer);
-            DisplayingOptions displaying = new DisplayingOptions();
             PlayableCharacter chooseCharacter = new PlayableCharacter();
 
             Console.Title = "Journey of Champions";
