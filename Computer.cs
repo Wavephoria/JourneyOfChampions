@@ -12,27 +12,27 @@ namespace JourneyOfChampions
     {
         Random rnd = new Random();
         List<int> moveChoices;
-
         public string MostUsedMove { get; private set; }
         public string LeastUsedMove { get; private set; }
         public string StyleOfPlay { get; private set; }
-
-        // KRAV 2:
-        // 1: Overloading av kunstruktorer
-        // 2: Skapas en motståndare utifrån de från början bestämde motståndarna, när alla är slagna så görs en overloading på en boss.
-        // 3: Overloading som tar in en bool om det är dags att möta bossen.
-        // När listan är tom så skapas det en overloading av computer som skapar bossen till spelet.
-
         public Computer(string name) : base(name)
         {
 
         }
 
-        public Computer(string name, bool boss) : base(name) 
+        // KRAV 2:
+        // 1: Overloading av konstruktorn.
+        // 2: I spelet så kommer det finnas ett antal som man möter och efter man klarat alla så kommer man möta en boss.
+        // 3: För att kunna skapa en boss karaktär när opponentslistan på champion är tom.
+        public Computer(string name, string boss) : base(name, boss) 
         {
-            SetSnakeStats();
+            Name = name;
+            if (name == "Snake")
+            {
+                SetSnakeStats();
+            }
+            Stats = new PlayerStats(this);
         }
-
         public override string CalculateMove(Character champion, Character computer, bool firstBattle) 
         {
             if (firstBattle)
@@ -41,28 +41,24 @@ namespace JourneyOfChampions
                 MostUsedMove = "High Kick";
                 LeastUsedMove = "Low kick";
             }
-
             else 
             {
                 moveChoices = new List<int> { };
                 UserMoves(moveChoices, champion);
             }
-
             string move = BasicMoves();
-
             return move;
         }
 
         private void UserMoves(List<int> moves, Character champion)
         {
-
-            int highKick = champion.Moves.HighKicksUsed;
-            int lowKick = champion.Moves.LowKicksUsed;
-            int highPunch = champion.Moves.HighPunchesUsed;
-            int lowPunch = champion.Moves.LowPunchesUsed;
-            int block = champion.Moves.BlocksUsed;
-            int dodge = champion.Moves.DodgesUsed;
-            int recover = champion.Moves.RecoversUsed;
+            int highKick = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.HighKick, 0);
+            int lowKick = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.LowKick, 0);
+            int highPunch = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.HighPunch, 0);  
+            int lowPunch = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.LowPunch, 0);
+            int block = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.Block, 0);
+            int dodge = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.Dodge, 0);
+            int recover = champion.Stats.MoveUsage.GetValueOrDefault(MoveType.Recover, 0);
 
             int attackingMoves = highKick + lowKick + highPunch + lowPunch;
             int defensiveMoves = block + dodge + recover;
@@ -79,7 +75,6 @@ namespace JourneyOfChampions
             {
                 StyleOfPlay = "Balanced";
             }
-
 
             Dictionary<string, int> moveDict = new Dictionary<string, int>
             {
@@ -141,12 +136,5 @@ namespace JourneyOfChampions
                 return allMoves[index];
             }
         }
-        private void DiegoMoves(Character champion, List<int> moveChoices)
-        {
-            
-
-        }
-
-
     }
 }

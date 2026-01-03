@@ -9,42 +9,23 @@ namespace JourneyOfChampions
     {
         static async Task Main(string[] args)
         {
-            Battle battle = new Battle();
+            Move executer = new Move();
+            Battle battle = new Battle(executer);
+            DisplayingOptions displaying = new DisplayingOptions();
             string enemyName;
 
             Console.Title = "Journey of Champions";
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.BackgroundColor = ConsoleColor.Magenta;
 
-            var musicPlayer = new Player();
-            await musicPlayer.Play(@"sounds\QuirkyRunner.mp3");
-
-            DisplayingStats stats = new DisplayingStats();
+            // var musicPlayer = new Player();
+            // await musicPlayer.Play(@"sounds\QuirkyRunner.mp3")
 
             Console.WriteLine("Your journey to be a champion starts now!");
             Console.WriteLine("Get ready...");
             Console.WriteLine("Your first decision is to choose which character you wanna use:");
-            var s = "SNAAAAAAAAKE"; var cols = new[] { ConsoleColor.Red, ConsoleColor.Yellow, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Blue, ConsoleColor.Magenta, ConsoleColor.White }; for (int i = 0; i < s.Length; i++) { Console.ForegroundColor = cols[i % cols.Length]; Console.SetCursorPosition(i, 10 + (int)(Math.Sin(i / 1.5) * 2)); Console.Write(s[i]); }
-            Console.ResetColor();
 
-            string[] availableCharacters =
-            {
-                "Diego",
-                "Donald",
-                "Wanaporn",
-                "Asa",
-                "Vladimir",
-                "Haakon"
-            };
-
-            Console.WriteLine("You have the following options:");
-            foreach (string name in availableCharacters)
-            {
-                Console.WriteLine($"- {name}");
-            }
-
-
-
+            displaying.DisplayAvailableCharacters();
 
 
             Console.Write("Choose a character: ");
@@ -52,37 +33,55 @@ namespace JourneyOfChampions
 
             Character champion = new Champion(chosenName);
 
-            Console.WriteLine(champion.Name);
-            Console.WriteLine(champion.Origin);
+            displaying.DisplayStats(champion, chosenName);
 
-            champion.Moves.AddingMoves();
-
-            Console.WriteLine($"(You have chosen {chosenName} as your character!)");
-
-            while (champion.Opponents.Count > 0) 
+            Console.WriteLine("Do you want to play against computer or another player? (Type 'computer' or 'player')");
+            string opponentType = Console.ReadLine().ToLower();
+            if (opponentType == "player")
             {
-                enemyName = champion.NextOpponent();
-                Console.WriteLine($"Your first opponent is {enemyName}");
+                Console.Write("Enter the name of your opponent: ");
+                enemyName = Console.ReadLine();
+                Character opponent = new Champion(enemyName);
+                battle.StartFight(champion, opponent);
+                return;
+            }
 
-                Character enemyChampion = new Computer(enemyName);
+            else 
+            {
+                while (champion.Opponents.Count != 0 && champion.IsAlive == true)
+                {
+                    Character computer = new Computer(champion.NextOpponent());
+                    battle.StartFight(champion, computer);
 
-                await musicPlayer.Play(@"sounds\TheJazzMan.mp3");
-                battle.StartFight(champion, enemyChampion);
+                    foreach (var moveUsages in champion.Stats.MoveUsage)
+                    {
+                        Console.WriteLine($"{moveUsages.Key}: used {moveUsages.Value} times.");
+                    }
+                }
+
+                if (champion.Opponents.Count == 0 && champion.IsAlive == true)
+                {
+
+                    Console.WriteLine("Congratulations! You have defeated all opponents in the world circuit!");
+                    Console.WriteLine("Now is the time for the ultimate challenge");
+
+                    Character finalBoss = new Computer("Snake", "boss");
+                    battle.StartFight(champion, finalBoss);
+
+                }
+
 
             }
 
-            enemyName = champion.NextOpponent(true);
 
-            Character enemyBoss = new Computer(enemyName, true);
-
-            await musicPlayer.Play(@"sounds\QuietTension.mp3");
-            Console.WriteLine($"A new challenger awaits {enemyName}, last boss of this journey");
-
-            battle.StartFight(champion, enemyBoss);
-
-            Console.ReadLine();
-
-            
+            if (champion.IsAlive)
+            {
+                Console.WriteLine("Congratulations! You are the Journey of Champions winner!");
+            }
+            else
+            {
+                Console.WriteLine("You have been defeated. Better luck next time!");
+            }
         }
 
         

@@ -10,27 +10,20 @@ namespace JourneyOfChampions
 {
     abstract class Character
     {
+
         // KRAV 6:
-        // 1: Subtypspolymorfism/Arv
-        // 2: Klasserna Champion och Computer ärver direkt från Character-klassen.
-        // 3: Character-klassen innehåller properties och metoder som är gemensamma för båda subklasserna.
-        // Men hur man spelar skiljer sig om det är en spelare eller dator som gör draget.
-
-        // KRAV 1:
-        // 1: Inkapsling/Informationskapsling
-        // 2: Användning av protected för properties och fields som ska ärvas.
-        // 3: När man skapar sin karaktär i Champion-klassen så kan man använda sig av dessa properties.
-
+        // 1: Subtypspolymorfism
+        // 2: En supertyp som styr hur karaktärer i spelet fungerar och sedan subtyper som är specifika karaktärer som ärver från supertypen.
+        // 3: I spelet så kommer det finnas möjlighet att antingen spela mot en annan spelare eller mot datorn. Därför har vi en supertyp
+        // som styr den grundläggande logiken och sen subtyper för spelare och dator då de skiljer sig åt i vissa delar.
+        // När man skapar sin spelare och spelar mot en dator så skapas en lista på vilka motståndare men har kvar att möta. Den listan töms efter varje
+        // vunnen match. En dator använder den listan för att bestämma nästa motståndare och dessutom använder datorn spelarens statistik för att
+        // anpassa sin spelstil.
         public List<string> Opponents { get; protected set; }
-        public MovesUsed Moves { get; protected set; }
+        public PlayerStats Stats { get; protected set; }
         public string Name { get; protected set; }
-
-        // KRAV 3:
-        // 1: Computed Properties
-        // 2: Health har ett värde som ändras i klassen Battle när man tar skada.
-        // 3: För att räkna ut om man fortfarande är vid liv.
         public int Health { get; set; }
-        public bool IsAlive => Health > 0;      
+        public bool IsAlive => Stats.isAlive;
         public int Stamina { get; set; }
         private int highKickPower;
         public int HighKickPower => highKickPower;
@@ -72,14 +65,44 @@ namespace JourneyOfChampions
                 case "Haakon":
                     SetHaakonStats();
                     break;
-
-                case "Snake":
-                    break;
                 default:
                     throw new ArgumentException("Unknown character name", nameof(name));
 
             }
+
+            // KRAV 4:
+            // 1: Objectkomposition
+            // 2: När man skapar en karaktär i spelet så måste den också hämta in stats för den specifika karaktären och hålla
+            // koll på när statsen ändrar sig, därför har varje karaktär en egen playerstats där man förändrar alla data genom.
+            // 3: För att vara karaktär i spelet har olika stats och under stridens gång ändras även statistiken för karaktären.
+
+            Stats = new PlayerStats(this);
         }
+        public Character(string name, string boss) 
+        {
+
+        }
+
+        public void UseMove(Move move) => Stats.IncrementUsage(move.Type);
+
+        public bool TrySpendStaminaFor(Move move)
+        {
+            if (Stats.StaminaCostByMove.TryGetValue(move.Type, out int cost) && Stats.Stamina >= cost)
+            {
+                Stats.SpendStamina(cost);
+                return true;
+            }
+            return false;
+        }
+
+        public int CalculateDamage(Move move) => Stats.DamageByMove.GetValueOrDefault(move.Type);
+
+        public void TakeDamage(int amount) => Stats.TakeDamage(amount);
+
+
+
+
+
         private Characters name;
         enum Characters
         {
@@ -97,7 +120,7 @@ namespace JourneyOfChampions
             origin = "Brazil";
             Health = 150;
             Stamina = 150;
-            highKickPower = 25;
+            highKickPower = 200;
             lowKickPower = 15;
             highPunchPower = 20;
             lowPunchPower = 10;
@@ -139,7 +162,7 @@ namespace JourneyOfChampions
             origin = "Sweden";
             Health = 150;
             Stamina = 175;
-            highKickPower = 150;
+            highKickPower = 15;
             lowKickPower = 15;
             highPunchPower = 20;
             lowPunchPower = 15;
@@ -176,7 +199,7 @@ namespace JourneyOfChampions
             recoveryRate = 25;
         }
 
-        protected void SetSnakeStats()
+        internal void SetSnakeStats()
         {
             name = Characters.Snake;
             origin = "Unknown";
@@ -193,8 +216,9 @@ namespace JourneyOfChampions
         }
 
 
+
+
         public virtual string NextOpponent() { return ""; }
-        public virtual string NextOpponent(bool boss) { return ""; }
         public virtual string CalculateMove(Character champion, Character computer, bool firstBattle) { return ""; }
 
 
