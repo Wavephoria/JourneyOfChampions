@@ -27,7 +27,7 @@ namespace JourneyOfChampions
 
         public override string NextOpponent()
         {
-            if (Opponents.Count != 0)
+            if (Opponents!.Count != 0)
             {
                 string enemy = Opponents[rnd.Next(Opponents.Count)];
                 Opponents.Remove(enemy);

@@ -11,10 +11,10 @@ namespace JourneyOfChampions
     internal class Computer : Character
     {
         Random rnd = new Random();
-        List<int> moveChoices;
-        public string MostUsedMove { get; private set; }
-        public string LeastUsedMove { get; private set; }
-        public string StyleOfPlay { get; private set; }
+        List<int>? moveChoices;
+        public string? MostUsedMove { get; private set; }
+        public string? LeastUsedMove { get; private set; }
+        public string? StyleOfPlay { get; private set; }
         public Computer(string name) : base(name)
         {
 

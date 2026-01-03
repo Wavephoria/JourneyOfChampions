@@ -19,11 +19,11 @@ namespace JourneyOfChampions
         // När man skapar sin spelare och spelar mot en dator så skapas en lista på vilka motståndare men har kvar att möta. Den listan töms efter varje
         // vunnen match. En dator använder den listan för att bestämma nästa motståndare och dessutom använder datorn spelarens statistik för att
         // anpassa sin spelstil.
-        public List<string> Opponents { get; protected set; }
-        public PlayerStats Stats { get; protected set; }
-        public string Name { get; protected set; }
+        public List<string>? Opponents { get; protected set; }
+        public PlayerStats Stats { get; init; }
+        public string? Name { get; protected set; }
         public int Health { get; set; }
-        public bool IsAlive => Stats.isAlive;
+        public bool IsAlive => Stats!.isAlive;
         public int Stamina { get; set; }
         private int highKickPower;
         public int HighKickPower => highKickPower;
@@ -39,8 +39,8 @@ namespace JourneyOfChampions
         public int DodgeChance => dodgeChance;
         private int recoveryRate; 
         public int RecoveryRate => recoveryRate;
-        public string Origin => origin;
-        private string origin;
+        public string Origin => origin!;
+        private string? origin;
 
         public Character(string name) 
         {
@@ -114,7 +114,7 @@ namespace JourneyOfChampions
             Haakon,
             Snake
         }
-        private void SetDiegoStats()
+        protected void SetDiegoStats()
         {
             name = Characters.Diego;
             origin = "Brazil";
@@ -128,7 +128,7 @@ namespace JourneyOfChampions
             dodgeChance = 85;
             recoveryRate = 10;
         }
-        private void SetDonaldStats()
+        protected void SetDonaldStats()
         {
             name = Characters.Donald;
             origin = "USA";
@@ -142,7 +142,7 @@ namespace JourneyOfChampions
             dodgeChance = 60;
             recoveryRate = 10;
         }
-        private void SetWanapornStats()
+        protected void SetWanapornStats()
         {
             name = Characters.Wanaporn;
             origin = "Thailand";
@@ -156,7 +156,7 @@ namespace JourneyOfChampions
             dodgeChance = 85;
             recoveryRate = 20;
         }
-        private void SetAsaStats()
+        protected void SetAsaStats()
         {
             name = Characters.Asa;
             origin = "Sweden";
@@ -170,7 +170,7 @@ namespace JourneyOfChampions
             dodgeChance = 75;
             recoveryRate = 20;
         }
-        private void SetVladimirStats()
+        protected void SetVladimirStats()
         {
             name = Characters.Vladimir;
             origin = "Russia";
@@ -184,7 +184,7 @@ namespace JourneyOfChampions
             dodgeChance = 55;
             recoveryRate = 15;
         }
-        private void SetHaakonStats()
+        protected void SetHaakonStats()
         {
             name = Characters.Haakon;
             origin = "Norway";
@@ -199,7 +199,7 @@ namespace JourneyOfChampions
             recoveryRate = 25;
         }
 
-        internal void SetSnakeStats()
+        protected void SetSnakeStats()
         {
             name = Characters.Snake;
             origin = "Unknown";

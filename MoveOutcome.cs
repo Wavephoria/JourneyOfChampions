@@ -8,9 +8,9 @@ namespace JourneyOfChampions
 {
     internal class MoveOutcome
     {
-        public Character Attacker { get; init; }
-        public Character Defender { get; init; }
-        public Move MoveUsed { get; init; }
+        public required Character Attacker { get; init; }
+        public required Character Defender { get; init; }
+        public required Move MoveUsed { get; init; }
         public int DamageDealt { get; init; }
         public bool StaminaSpent { get; init; }
     }
